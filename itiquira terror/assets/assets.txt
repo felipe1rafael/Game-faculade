@@ -1,8 +1,10 @@
 .gitkeep
+Menu.gif
 arbusto.gif
 arvore.gif
 energia.gif
 medkit.gif
+playerteste.gif
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt
