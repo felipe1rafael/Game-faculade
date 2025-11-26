@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
+
+
 public class Level1Screen  implements Screen{
 	private Game game;
 	private GameMap map;
@@ -36,7 +38,7 @@ public class Level1Screen  implements Screen{
 		batch = new SpriteBatch();
 		map = new GameMap("mapav1.tmx");
 		Vector2 StartPosition = new Vector2(16,450);
-		player = new Player(StartPosition, viewport);
+		player = Player.getInstance(StartPosition, viewport);
 
 	}
 
@@ -114,6 +116,12 @@ public class Level1Screen  implements Screen{
 		// TODO Auto-generated method stub
 		
 	}
+	public Game getGame() {
+		return game;
+	}
+	public void setGame(Game game) {
+		this.game = game;
+	}
 
 	@Override
 	public void dispose() {
@@ -123,12 +131,5 @@ public class Level1Screen  implements Screen{
 		player.getTexture().dispose();
 		
 		
-	}
-	public Game getGame() {
-		return game;
-	}
-	public void setGame(Game game) {
-		this.game = game;
-	}
-
+	
 }
