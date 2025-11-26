@@ -1,8 +1,15 @@
 .gitkeep
+Farm.png
+Floors_Tiles.png
+Size_02.png
+Vegetation.png
+Water_tiles.png
 arbusto.gif
 arvore.gif
 energia.gif
+mapav1.tmx
 medkit.gif
+menuFrame.png
 playerteste.gif
 ui/font-list.fnt
 ui/font-subtitle.fnt

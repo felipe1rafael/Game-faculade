@@ -48,7 +48,7 @@ public class Menu implements Screen {
     	font.draw(batch,"clique para iniciar", Gdx.graphics.getWidth()/2 - 50, 50);	
     	batch.end();
     	if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-            game.setScreen(new Level1Screen(game)); 
+            game.setScreen(new Level1Screen(game));
         }
     }
 
