@@ -2,13 +2,18 @@ package terror.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** First screen of the application. Displayed after the application is created. */
 public class Menu implements Screen {
@@ -17,16 +22,33 @@ public class Menu implements Screen {
     private float time = 0;
 	private SpriteBatch batch;
 	private Game game;
-	private BitmapFont font;
+	private Skin playButtonSkin;
+	private Stage stage;
+	private Viewport viewport;
+	
 	public Menu(Game game) {
         this.game = game;
     }
     @Override
     public void show() {
         // Prepare your screen here.
+    	viewport = new ScreenViewport();
+    	stage = new Stage(viewport);
     	batch = new SpriteBatch();
-        font = new BitmapFont();
-        sheet = new Texture("menuFrame.png"); 
+        playButtonSkin = new Skin(Gdx.files.internal("ui/playbotao.json"));
+        Table table = new Table(playButtonSkin);
+        table.setFillParent(true);
+        TextButton playButton = new TextButton( "Play",playButtonSkin);
+        table.add(playButton).width(200).height(80);
+		stage.addActor(table);
+		Gdx.input.setInputProcessor(stage);
+		playButton.addListener(new com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
+		    @Override
+		    public void changed (ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+		        game.setScreen(new Level1Screen(game));
+		    }
+		});
+        sheet = new Texture("menuFrame.png");
         TextureRegion[][] tmp = TextureRegion.split(sheet, 1280, 730); 
         TextureRegion[] frames = new TextureRegion[tmp.length * tmp[0].length];
         int index = 0;
@@ -44,12 +66,11 @@ public class Menu implements Screen {
     	time += delta;
         TextureRegion frame = anim.getKeyFrame(time, true);
     	batch.begin();
-    	  batch.draw(frame, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    	font.draw(batch,"clique para iniciar", Gdx.graphics.getWidth()/2 - 50, 50);	
+    	batch.draw(frame, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     	batch.end();
-    	if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-            game.setScreen(new Level1Screen(game));
-        }
+    	stage.act(delta);//tem que ser desenhado depois do batch.end()
+    	stage.draw();
+    	
     }
 
     @Override
@@ -57,6 +78,8 @@ public class Menu implements Screen {
         // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
         // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
         if(width <= 0 || height <= 0) return;
+        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
 
         // Resize your screen here. The parameters represent the new window size.
     }
@@ -80,7 +103,9 @@ public class Menu implements Screen {
     public void dispose() {
         // Destroy screen's assets here.
     	sheet.dispose();
-    	font.dispose();
     	batch.dispose();
+    	stage.dispose();
+    	playButtonSkin.dispose();
+    	
     }
 }
