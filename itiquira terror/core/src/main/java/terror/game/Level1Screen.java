@@ -2,11 +2,11 @@ package terror.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -23,6 +23,9 @@ public class Level1Screen  implements Screen{
 	private SpriteBatch batch;
 	private final int WORLD_WIDTH = 250;
 	private final int WORLD_HEIGHT = 250;
+	private VidaHud vidaHud;
+	private Stamina staminaHud;
+	private Movimento movimento;
 	
 
     public Level1Screen(Game game) {
@@ -39,52 +42,33 @@ public class Level1Screen  implements Screen{
 		map = new GameMap("mapav1.tmx");
 		Vector2 StartPosition = new Vector2(16,450);
 		player = Player.getInstance(StartPosition, viewport);
-
+		vidaHud = new VidaHud (player);	
+		staminaHud = new Stamina (player);
+		movimento = new Movimento (player);
 	}
 
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-        andar(delta);
+        movimento.andar(delta);
         //centraliza e Atualiza a Câmera
         centerCameraOnPlayer();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Usa GL20 para limpar a tela
         map.render(camera);
-        batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);	
         batch.begin();
         batch.draw(player.getTexture(), player.getPosition().x, player.getPosition().y);
         batch.end();
+        batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        batch.begin();
+        vidaHud.desenho(batch);	
+        staminaHud.desenho(batch);
+        batch.end();
     }
 	
-    private void andar(float delta) {
-        float deltaX = 0;
-        float deltaY = 0;
-        boolean estaCorrendo= Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
-        player.Sprint(estaCorrendo);
-        if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.S) ||
-                Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-        	if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-        		deltaY += 1;
-        	}
-        	if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-        		deltaY -= 1;
-        	}
-        	if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-        		deltaX += 1;
-        	}
-        	if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-        		deltaX -= 1;
-        	}
-     // andar na diagonal
-        	if (deltaX != 0 || deltaY != 0) {
-        		float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        		deltaX /= length;
-        		deltaY /= length;
-        }
-        }	
-        player.move(deltaX, deltaY, delta);
-    }
+    	
+        
     // gerado automaticamente,para andar a câmera junto com o player
     private void centerCameraOnPlayer() {
 		Vector2 playerPos = player.getPosition();
@@ -129,7 +113,7 @@ public class Level1Screen  implements Screen{
 		map.dispose();
 		batch.dispose();
 		player.getTexture().dispose();
-		
+		vidaHud.dispose();
 		
 	
 }}
