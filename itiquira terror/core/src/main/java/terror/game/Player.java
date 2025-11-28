@@ -1,6 +1,7 @@
 	package terror.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.Getter;
@@ -17,6 +18,9 @@ public class Player {
 	private Vector2 position;
 	private Viewport viewport;
 	private static Player instance;
+	private Rectangle rectangleCorpo;
+	private float altura ;
+	private float largura ;
 	private Player(Vector2 position, Viewport viewport) {
 		this.health = 3;
 		this.stamina = 100;
@@ -25,6 +29,9 @@ public class Player {
 		this.texture = new Texture("playerteste.png");
 		this.position = position;
 		this.viewport = viewport;
+		this.largura = texture.getWidth();
+		this.altura = texture.getHeight();	
+		rectangleCorpo = new Rectangle(position.x, position.y, largura, altura);
 	}
 	public static Player getInstance(Vector2 position, Viewport viewport) {
 		if (instance == null) {
@@ -47,9 +54,11 @@ public class Player {
 	
 	
 	public void move(float deltaX, float deltaY, float deltaTime) {
-	    position.x += deltaX * vel2 * deltaTime;
-	    position.y += deltaY * vel2 * deltaTime;
-	    // Mantém o jogador dentro dos limites da tela
+	    float amountX = deltaX * vel2 * deltaTime;
+	    float amountY = deltaY * vel2 * deltaTime;
+	    position.x += amountX;
+	    position.y += amountY;
+	    rectangleCorpo.setPosition(position.x, position.y);
 	}
 	
 	void dispose() {

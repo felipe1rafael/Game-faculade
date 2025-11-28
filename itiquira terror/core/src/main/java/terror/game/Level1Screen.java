@@ -39,12 +39,12 @@ public class Level1Screen  implements Screen{
 		viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 		viewport.apply(true);
 		batch = new SpriteBatch();
-		map = new GameMap("mapav1.tmx");
+		map = new GameMap("mapav2.tmx");
 		Vector2 StartPosition = new Vector2(16,450);
 		player = Player.getInstance(StartPosition, viewport);
 		vidaHud = new VidaHud (player);	
 		staminaHud = new Stamina (player);
-		movimento = new Movimento (player);
+		movimento = new Movimento (player,map);
 	}
 
 	@Override

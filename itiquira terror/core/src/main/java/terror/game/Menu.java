@@ -80,7 +80,6 @@ public class Menu implements Screen {
         if(width <= 0 || height <= 0) return;
         viewport.update(width, height, true);
         stage.getViewport().update(width, height, true);
-
         // Resize your screen here. The parameters represent the new window size.
     }
 
