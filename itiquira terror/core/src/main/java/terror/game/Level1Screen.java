@@ -55,11 +55,12 @@ public class Level1Screen  implements Screen{
         centerCameraOnPlayer();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Usa GL20 para limpar a tela
-        map.render(camera);
+        map.renderCamadasBaixo(camera);
         batch.setProjectionMatrix(camera.combined);	
         batch.begin();
         batch.draw(player.getTexture(), player.getPosition().x, player.getPosition().y);
         batch.end();
+        map.renderCamadasCima(camera);
         batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         batch.begin();
         vidaHud.desenho(batch);	

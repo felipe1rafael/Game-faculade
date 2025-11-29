@@ -1,7 +1,6 @@
 package terror.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -28,17 +27,30 @@ public class GameMap {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 collisionRectangles.add(rect);
             }
+            		
         }
 		}
     
-	public void render(OrthographicCamera camera) {
-		Gdx.gl.glClearColor(0, 0, 0, 1); 
-	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	    if (map != null) {
+	public void renderCamadasCima(OrthographicCamera camera) {
+		if (map != null) {
 	        renderer.setView(camera);
-	        renderer.render();
+	        int[] foregroundLayers = {
+	            map.getLayers().getIndex("arvore")
+	        }; 
+	        renderer.render(foregroundLayers);
 	    }
-	}
+	    }
+	public void renderCamadasBaixo(OrthographicCamera camera) {
+		if (map != null) {
+	        renderer.setView(camera);
+	        int[] foregroundLayers = {
+	            map.getLayers().getIndex("chao"),
+	            map.getLayers().getIndex("camada1"),
+	        }; 
+	        renderer.render(foregroundLayers);
+	    }
+	    }
+	
     public boolean isColliding(Rectangle playerBounds) {
         for (Rectangle collisionRect : collisionRectangles) {
             if (playerBounds.overlaps(collisionRect)) {
